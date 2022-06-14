@@ -13,14 +13,14 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
-lineas = LOAD 'data.tsv' AS (line:chararray);
+lineas = LOAD 'data.tsv' AS (line:CHARARRAY);
 
-letras = FOREACH lineas GENERATE FLATTEN(TOKENIZE(linea)) AS letra;
+palabras = FOREACH lineas GENERATE FLATTEN(TOKENIZE(line)) AS palabra;
 
-agrupar = GROUP letras BY letra;
+grouped = GROUP palabras BY palabra;
 
-contarleetras = FOREACH agrupar GENERATE group, COUNT(letras);
+contarpalabra = FOREACH grouped GENERATE group, COUNT(palabras);
 
-cantidad = LIMIT contarletras 15;
+cantidad = LIMIT contarpalabra 15;
 
 STORE cantidad INTO 'output' USING PigStorage(',');
