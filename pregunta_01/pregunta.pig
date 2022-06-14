@@ -15,11 +15,11 @@ $ pig -x local -f pregunta.pig
 
 lineas = LOAD 'data.tsv' AS (line:chararray);
 
-letra = FOREACH lineas GENERATE FLATTEN(TOKENIZE(linea)) AS letra;
+letras = FOREACH lineas GENERATE FLATTEN(TOKENIZE(linea)) AS letra;
 
 agrupar = GROUP letras BY letra;
 
-contarleetras = FOREACH agrupar GENERATE group, COUNT(letra);
+contarleetras = FOREACH agrupar GENERATE group, COUNT(letras);
 
 cantidad = LIMIT contarletras 15;
 
