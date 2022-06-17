@@ -14,3 +14,15 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+
+lineas = LOAD 'data.tsv' AS (letra:CHARARRAY, letrasMinusculas:BAG{t:TUPLE(a:CHARARRAY)}, claves:[]);
+
+extraercolumna = FOREACH lineas GENERATE claves;
+
+columna = FOREACH extraercolumna GENERATE COUNT(KEYSET($0));
+
+contar = FOREACH lineas GENERATE letra, COUNT(letrasMinusculas) as contar, COUNT(KEYSET(claves)) as clave;
+
+ordenar = ORDER contar BY letra, contar, clave asc;
+
+STORE ordenar INTO 'output' USING PigStorage(',');

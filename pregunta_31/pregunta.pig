@@ -14,3 +14,12 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+lineas = LOAD 'data.csv' USING PigStorage(',') AS (numero:int, nombre:CHARARRAY, apellido:CHARARRAY, fecha:Datetime, color:CHARARRAY, num:int);
+
+palabras = FOREACH lineas GENERATE GetYear(fecha) AS palabra;
+
+agrupar = GROUP palabras BY palabra;
+
+contarpalabra = FOREACH agrupar GENERATE group, COUNT(palabras);
+
+STORE contarpalabra INTO 'output' USING PigStorage(',');

@@ -34,3 +34,17 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+
+lineas = LOAD 'data.csv' USING PigStorage(',') AS (numero:int, nombre:CHARARRAY, apellido:CHARARRAY, fecha:Datetime, color:CHARARRAY, num:int);
+
+seleccionaColumnas = FOREACH lineas GENERATE ToString(fecha, 'yyyy-MM-dd') as fecha01, ToString(fecha, 'MMM') as fecha02, 
+ToString(fecha, 'MM,M') as fecha03;
+
+Coljuntas = FOREACH seleccionaColumnas GENERATE fecha01,
+(fecha02 == 'Jan'? 'ene':(fecha02 == 'Feb'? 'feb':(fecha02 == 'Mar'? 'mar':(fecha02 == 'Apr'? 'abr':
+(fecha02 == 'May'? 'may':(fecha02 == 'Jun'? 'jun':(fecha02 == 'Jul'? 'jul':(fecha02 == 'Aug'? 'ago':
+(fecha02 == 'Sep'? 'sep':(fecha02 == 'Oct'? 'oct':(fecha02 == 'Nov'? 'nov':
+(fecha02 == 'Dec'? 'dic':'falso')))))))))))) as abreviardia,
+fecha03;
+
+STORE Coljuntas INTO 'output' USING PigStorage(',');

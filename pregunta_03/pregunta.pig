@@ -11,3 +11,14 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+
+
+lineas = LOAD 'data.tsv' AS (letra:chararray, fecha:chararray, numero:int);
+
+columna = FOREACH lineas GENERATE numero;
+
+datosunicos = DISTINCT columna;
+
+contar = LIMIT datosunicos 5;
+
+STORE contar INTO 'output' USING PigStorage(',');
