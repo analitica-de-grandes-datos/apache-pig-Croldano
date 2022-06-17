@@ -22,12 +22,10 @@ $ pig -x local -f pregunta.pig
         /* >>> Escriba su respuesta a partir de este punto <<< */
 */
 
-datos = LOAD 'data.csv' USING PigStorage(',') AS (id:int, nombre:chararray, apellido:chararray, fecha:chararray, color:chararray);
+lines = LOAD 'data.csv' USING PigStorage(',') AS (id:int, nombre:chararray, apellido:chararray, fecha:chararray, color:chararray);
 
-colores = FOREACH datos GENERATE FLATTEN(color) AS colorAplica;
+selectcolor = FOREACH lines GENERATE nombre, color;
 
-coloresMatch = FOREACH colores GENERATE REGEX_EXTRACT(colorAplica, '(^b.*)',1) AS colorFinal;
+bcolor= FILTER selectcolor BY ($1 matches '.*blue.*') OR ($0 matches '.*k.*');
 
-coloresSinNull = FILTER coloresMatch BY colorFinal is not null;
-
-STORE coloresSinNull INTO 'output';
+STORE bcolor INTO 'output' USING PigStorage (',');
