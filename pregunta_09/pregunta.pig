@@ -36,5 +36,5 @@ lineas = LOAD 'data.csv' USING PigStorage(',') AS (numero:int, nombre:CHARARRAY,
 
 correr = FOREACH lineas GENERATE CONCAT(nombre, '@', apellido);
 
-STORE corr INTO 'output';
+STORE correr INTO 'output';
 
