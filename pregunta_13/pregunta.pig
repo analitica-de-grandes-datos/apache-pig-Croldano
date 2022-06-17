@@ -24,8 +24,11 @@ $ pig -x local -f pregunta.pig
 
 lineas = LOAD 'data.csv' USING PigStorage(',') AS (numero:int, nombre:CHARARRAY, apellido:CHARARRAY, fecha:CHARARRAY, color:CHARARRAY, num:int);
 
+
 selectcolor = FOREACH lineas GENERATE color;
 
+
 bcolor = FILTER selectcolor BY ($0 matches '.*b.*');
+
 
 STORE bcolor INTO 'output';
