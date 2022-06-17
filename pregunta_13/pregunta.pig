@@ -29,5 +29,3 @@ selectcolor = FOREACH linea GENERATE color;
 bcolor = FILTER selectcolor BY ($0 matches '.*b.*');
 
 STORE bcolor INTO 'output';
-
-
